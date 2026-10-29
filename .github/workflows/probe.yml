@@ -1,0 +1,21 @@
+name: label-probe
+on:
+  issues:
+    types: [opened, labeled, assigned, edited]
+permissions:
+  issues: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Report event
+        env:
+          ACTOR: ${{ github.actor }}
+          ACTION: ${{ github.event.action }}
+          LABEL: ${{ github.event.label.name }}
+          LABELS: ${{ join(github.event.issue.labels.*.name, ',') }}
+          DUMMY: ${{ secrets.DUMMY_SECRET }}
+        run: |
+          echo "action=$ACTION label=$LABEL labels=$LABELS actor=$ACTOR"
+          echo "dummy_secret_len=${#DUMMY}"
+          gh issue comment "${{ github.event.issue.number }}" --body "probe: action=$ACTION label=$LABEL labels=$LABELS actor=$ACTOR secret_len=${#DUMMY}"
