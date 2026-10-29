@@ -1,0 +1,9 @@
+name: Submit a Hook
+description: probe template
+title: "hook: "
+labels: ["submission"]
+body:
+  - type: input
+    id: address
+    attributes:
+      label: Hook Address
